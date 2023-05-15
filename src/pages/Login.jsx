@@ -1,3 +1,4 @@
+import { Button, TextField } from '@mui/material';
 import PropTypes from 'prop-types';
 import React from 'react';
 import { connect } from 'react-redux';
@@ -36,30 +37,34 @@ class Login extends React.Component {
     const { btnDisable, email, password } = this.state;
 
     return (
-      <div>
-        <input
+      <div className="Login glass">
+        <h2>Trybe Wallet</h2>
+        <TextField
           type="text"
           name="email"
-          placeholder="E-mail"
+          label="E-mail"
+          variant="filled"
           data-testid="email-input"
           value={ email }
           onChange={ this.handleChange }
         />
-        <input
+        <TextField
           type="password"
           name="password"
-          placeholder="Password"
+          label="Password"
+          variant="filled"
           data-testid="password-input"
           value={ password }
           onChange={ this.handleChange }
         />
-        <button
+        <Button
           onClick={ this.goToWallet }
           disabled={ btnDisable }
+          variant="contained"
         >
           Entrar
 
-        </button>
+        </Button>
       </div>
     );
   }

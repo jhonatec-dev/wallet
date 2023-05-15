@@ -1,0 +1,65 @@
+/* Reset */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+
+  --main-color: rgba(108, 143, 209, 0.5);
+
+  --main-text-color: white;
+}
+
+body {
+  background-image: url('../media/images/background.png');
+  background-size: cover;
+  height: 100%;
+  overflow-y: scroll;
+}
+
+.glass {
+  backdrop-filter: blur(10px);
+  background-color: rgba(108, 143, 209, 0.5);
+
+  /* border: 1px solid rgba(108, 192, 209, 0.5); */
+  border-radius: 10px;
+}
+
+.glass-header {
+  backdrop-filter: blur(10px);
+  background-color: rgba(108, 143, 209, 0.5);
+
+  /* border: 1px solid rgba(108, 192, 209, 0.5); */
+
+}
+
+/* Login */
+.Login {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 20% auto;
+  padding: 10px;
+  width: 400px;
+}
+
+/* Header */
+.Header {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+}
+
+.Header__total-field {
+  font-weight: 700;
+}
+
+/* Wallet Form */
+.WalletForm {
+  display: flex;
+}
+
+
+/* Table */

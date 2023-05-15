@@ -8,6 +8,12 @@ const INITIAL_STATE = {
   idToEdit: 0, // valor numérico que armazena o id da despesa que esta sendo editada
 };
 
+const getNextId = (expenses) => {
+  if (expenses.length < 1) return 0;
+  const expIds = expenses.map(({ id }) => id);
+  return (Math.max(...expIds) + 1);
+};
+
 const wallet = (state = INITIAL_STATE, action) => {
   switch (action.type) {
   case ACTIONS.fetchCurrencies:
@@ -19,7 +25,10 @@ const wallet = (state = INITIAL_STATE, action) => {
       ...state,
       expenses: [
         ...state.expenses,
-        { ...action.payload, id: state.expenses.length },
+        {
+          ...action.payload,
+          id: getNextId(state.expenses),
+        },
       ],
     };
   case ACTIONS.removeExpense:
