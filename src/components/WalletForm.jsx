@@ -2,15 +2,15 @@ import { Add } from '@mui/icons-material';
 import {
   Accordion, AccordionDetails,
   AccordionSummary, Button,
-  FormControl,
   InputLabel,
   MenuItem,
-  Select, TextField, Typography,
+  Select, TextField, Typography
 } from '@mui/material';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { actionWalletEditExpense, fetchCurrencies } from '../redux/actions';
+import SelectWithLabel from './SelectWithLabel';
 
 class WalletForm extends Component {
   state = {
@@ -148,24 +148,16 @@ class WalletForm extends Component {
                 </MenuItem>
               ))}
             </Select>
-            <FormControl>
-              <InputLabel id="methodInput-label">Método</InputLabel>
-              <Select
-                name="method"
-                id="methodInput"
-                variant="filled"
-                data-testid="method-input"
-                onChange={ this.handleChange }
-                value={ methodInput }
-                label="Método"
-                labelId="methodInput-label"
-                sx={ { minWidth: '150px' } }
-              >
-                <MenuItem value="Dinheiro">Dinheiro</MenuItem>
-                <MenuItem value="Cartão de crédito">Cartão de crédito</MenuItem>
-                <MenuItem value="Cartão de débito">Cartão de débito</MenuItem>
-              </Select>
-            </FormControl>
+            <SelectWithLabel
+              name="method"
+              id="methodInput"
+              data-testid="method-input"
+              onChange={ this.handleChange }
+              value={ methodInput }
+              label="Método"
+              options={ ['Dinheiro', 'Cartão de crédito', 'Cartão de débito'] }
+            />
+
             <InputLabel id="tagInput">Categoria</InputLabel>
             <Select
               name="tag"
