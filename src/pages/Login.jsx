@@ -3,7 +3,10 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { connect } from 'react-redux';
 import validator from 'validator';
+import logo from '../media/images/logo.png';
 import { actionUserLogin } from '../redux/actions';
+
+const sxInput = { filter: 'invert(95%)' };
 
 class Login extends React.Component {
   state = {
@@ -38,7 +41,8 @@ class Login extends React.Component {
 
     return (
       <div className="Login glass">
-        <h2>Trybe Wallet</h2>
+        <img className="Login__img" src={ logo } alt="logo" />
+
         <TextField
           type="text"
           name="email"
@@ -47,6 +51,7 @@ class Login extends React.Component {
           data-testid="email-input"
           value={ email }
           onChange={ this.handleChange }
+          sx={ sxInput }
         />
         <TextField
           type="password"
@@ -56,11 +61,13 @@ class Login extends React.Component {
           data-testid="password-input"
           value={ password }
           onChange={ this.handleChange }
+          sx={ sxInput }
         />
         <Button
           onClick={ this.goToWallet }
           disabled={ btnDisable }
           variant="contained"
+          sx={ sxInput }
         >
           Entrar
 

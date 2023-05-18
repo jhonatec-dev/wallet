@@ -2,9 +2,7 @@ import { Add } from '@mui/icons-material';
 import {
   Accordion, AccordionDetails,
   AccordionSummary, Button,
-  InputLabel,
-  MenuItem,
-  Select, TextField, Typography
+  TextField, Typography,
 } from '@mui/material';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
@@ -12,16 +10,22 @@ import { connect } from 'react-redux';
 import { actionWalletEditExpense, fetchCurrencies } from '../redux/actions';
 import SelectWithLabel from './SelectWithLabel';
 
+// Variáveis para renderizar
+const arrayMethods = ['Dinheiro', 'Cartão de crédito', 'Cartão de débito'];
+const arrayTags = ['Alimentação', 'Lazer', 'Trabalho', 'Transporte', 'Saúde'];
+
+const sxInput = { filter: 'invert(95%)' };
+
 class WalletForm extends Component {
   state = {
     valueInput: 0,
     descriptionInput: '',
     currencyInput: 'USD',
-    methodInput: '',
-    tagInput: 'alimentacao',
-    editor: false,
+    methodInput: arrayMethods[0],
+    tagInput: arrayTags[0],
     btnDisabled: true,
     showEdit: true,
+    idToEdit: 0,
   };
 
   componentDidMount() {
@@ -31,20 +35,24 @@ class WalletForm extends Component {
 
   shouldComponentUpdate(nextProps) {
     // console.log('should', nextProps);
-    const { editor } = this.state;
-    if (nextProps.editor !== editor) {
+    const { idToEdit } = this.state;
+
+    if (nextProps.editor && nextProps.idToEdit !== idToEdit) {
       // console.log('logica1');
       const { value, description, currency, tag, method } = nextProps.foundExp;
-      this.setState({ editor: nextProps.editor,
+      this.setState({
         valueInput: value,
         descriptionInput: description,
         currencyInput: currency,
         methodInput: method,
         tagInput: tag,
         showEdit: true,
+        idToEdit: nextProps.idToEdit,
+        btnDisabled: false,
       });
       return false;
     }
+
     return true;
   }
 
@@ -53,8 +61,10 @@ class WalletForm extends Component {
     this.setState({ btnDisabled: !valueInput > 0 });
   };
 
-  handleChange = ({ target: { id, value } }) => {
-    this.setState({ [id]: value }, this.validateFields);
+  handleChange = ({ target }) => {
+    const { name, value } = target;
+    // console.log('handleChange', target, name, value);
+    this.setState({ [name]: value }, this.validateFields);
   };
 
   editExpense = () => {
@@ -80,7 +90,7 @@ class WalletForm extends Component {
       methodInput: 'Dinheiro',
       tagInput: 'Alimentação',
       btnDisabled: true,
-      showEdit: false,
+      showEdit: !editor,
     });
   };
 
@@ -97,87 +107,81 @@ class WalletForm extends Component {
         sx={ { background: 'transparent' } }
       >
         <AccordionSummary
-          sx={ { background: 'var(--main-color)' } }
-          className="glass"
-          expandIcon={ <Add /> }
+          expandIcon={ <Add
+            sx={ { color: 'var(--main-text-color)',
+              fontSize: '32px' } }
+          /> }
           aria-controls="panel1a-content"
           id="panel1a-header"
           onClick={ () => this.setState((prev) => ({ showEdit: !prev.showEdit })) }
         >
-          <Typography fontWeight={ 600 }>{btnText}</Typography>
+          <Typography
+            fontWeight={ 600 }
+            fontSize={ 20 }
+            sx={ { color: 'var(--main-text-color)' } }
+          >
+            {btnText}
+
+          </Typography>
         </AccordionSummary>
-        <AccordionDetails className="glass-header">
+        <AccordionDetails>
           <div className="WalletForm">
             <TextField
               label="Valor"
               variant="filled"
+              name="valueInput"
               type="number"
               data-testid="value-input"
               value={ valueInput }
               onChange={ this.handleChange }
+              sx={ sxInput }
             />
 
+            <SelectWithLabel
+              name="currencyInput"
+              id="currencyInput"
+              data-testid="currency-input"
+              label="Moeda"
+              onChange={ this.handleChange }
+              value={ currencyInput }
+              options={ currencies }
+            />
+            <SelectWithLabel
+              name="methodInput"
+              id="methodInput"
+              data-testid="method-input"
+              onChange={ this.handleChange }
+              value={ methodInput }
+              label="Método"
+              options={ arrayMethods }
+            />
+
+            <SelectWithLabel
+              name="tagInput"
+              id="tagInput"
+              label="Categoria"
+              data-testid="tag-input"
+              onChange={ this.handleChange }
+              value={ tagInput }
+              options={ arrayTags }
+            />
             <TextField
               label="Descrição"
               type="text"
               variant="filled"
               data-testid="description-input"
               id="descriptionInput"
+              name="descriptionInput"
               value={ descriptionInput }
               onChange={ this.handleChange }
+              sx={ sxInput }
+              fullWidth
             />
-
-            <Select
-              name="currency"
-              id="currencyInput"
-              variant="filled"
-              data-testid="currency-input"
-              onChange={ this.handleChange }
-              value={ currencyInput }
-            >
-              { currencies.length > 0
-              && currencies.map((curr, index) => (
-                <MenuItem
-                  sx={ { background: 'var(--main-color)' } }
-                  key={ index }
-                  value={ curr }
-                  className="glass"
-                >
-                  {curr}
-
-                </MenuItem>
-              ))}
-            </Select>
-            <SelectWithLabel
-              name="method"
-              id="methodInput"
-              data-testid="method-input"
-              onChange={ this.handleChange }
-              value={ methodInput }
-              label="Método"
-              options={ ['Dinheiro', 'Cartão de crédito', 'Cartão de débito'] }
-            />
-
-            <InputLabel id="tagInput">Categoria</InputLabel>
-            <Select
-              name="tag"
-              id="tagInput"
-              variant="filled"
-              label="Categoria"
-              data-testid="tag-input"
-              onChange={ this.handleChange }
-              value={ tagInput }
-            >
-              <MenuItem value="Alimentação">Alimentação</MenuItem>
-              <MenuItem value="Lazer">Lazer</MenuItem>
-              <MenuItem value="Trabalho">Trabalho</MenuItem>
-              <MenuItem value="Transporte">Transporte</MenuItem>
-              <MenuItem value="Saúde">Saúde</MenuItem>
-            </Select>
             <Button
               onClick={ this.editExpense }
               disabled={ btnDisabled }
               variant="contained"
+              sx={ sxInput }
             >
               {btnText}
 

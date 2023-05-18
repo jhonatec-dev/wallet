@@ -1,37 +1,38 @@
 import {
   FormControl,
   InputLabel,
-  MenuItem,
-  Select,
+  NativeSelect,
 } from '@mui/material';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
+
+const sxInput = { filter: 'invert(95%)' };
 
 export default class SelectWithLabel extends Component {
   render() {
     const { id, label, options } = this.props;
     const labelId = `${id}-label`;
     return (
-      <FormControl>
+      <FormControl sx={ sxInput }>
         <InputLabel id={ labelId }>{label}</InputLabel>
-        <Select
+        <NativeSelect
           { ...this.props }
           variant="filled"
-          labelId={ labelId }
           sx={ { minWidth: '200px' } }
         >
           {
             options.map((opt, index) => (
-              <MenuItem
+              <option
                 value={ opt }
                 key={ index }
+
               >
                 {opt}
-              </MenuItem>
+              </option>
             ))
           }
 
-        </Select>
+        </NativeSelect>
       </FormControl>
     );
   }

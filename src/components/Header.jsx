@@ -1,12 +1,11 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import logo from '../media/images/logo.png';
 
 class Header extends Component {
   getTotalExpenses = () => {
     const { expenses } = this.props;
-
-    console.log('expenses', expenses);
 
     const result = expenses.reduce((sum, exp) => {
       const valExp = exp.value;
@@ -23,22 +22,26 @@ class Header extends Component {
     const currency = 'BRL';
     return (
       <div className="Header glass-header">
-        <div>
-          <span>Email: </span>
-          <span data-testid="email-field">{email}</span>
-        </div>
 
+        <img className="Header__img" src={ logo } alt="logo" />
         <div>
-          <span>Despesa Total: </span>
-          <span
-            data-testid="total-field"
-            className="Header__total-field"
-          >
-            {this.getTotalExpenses().toFixed(2)}
+          <div>
+            <span>Email: </span>
+            <span data-testid="email-field">{email}</span>
+          </div>
 
-          </span>
-          <span> </span>
-          <span data-testid="header-currency-field">{currency}</span>
+          <div>
+            <span>Despesa Total: </span>
+            <span
+              data-testid="total-field"
+              className="Header__total-field"
+            >
+              {this.getTotalExpenses().toFixed(2)}
+
+            </span>
+            <span> </span>
+            <span data-testid="header-currency-field">{currency}</span>
+          </div>
         </div>
 
       </div>

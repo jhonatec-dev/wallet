@@ -1,10 +1,16 @@
+import { Delete, Edit } from '@mui/icons-material';
+import { IconButton } from '@mui/material';
+import { DataGrid } from '@mui/x-data-grid';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { actionEditExpense, actionRemoveExpense } from '../redux/actions';
 
-const tableHeader = ['Descrição', 'Tag', 'Método de pagamento', 'Valor', 'Moeda',
-  'Câmbio utilizado', 'Valor convertido', 'Moeda de conversão', 'Editar/Excluir'];
+const sxTable = { filter: 'invert(0.95)' };
+const cinco = 5;
+const dez = 10;
+const quinze = 15;
+const pages = [cinco, dez, quinze];
 
 class Table extends Component {
   getNameCurrency = (expense) => expense.exchangeRates[expense.currency].name;
@@ -32,55 +38,76 @@ class Table extends Component {
     dispatch(actionEditExpense(id));
   };
 
-  renderEditButtons = (exp) => (
-    <>
-      <button
-        data-testid="edit-btn"
-        onClick={ () => this.editExpense(exp.id) }
-      >
-        Editar
+  getCols = () => {
+    const colNames = [
+      { field: 'description', headerName: 'DESCRIÇÃO', width: 150 },
+      { field: 'value', headerName: 'VALOR' },
+      { field: 'currency', headerName: 'MOEDA', width: 250 },
+      { field: 'cambio', headerName: 'CÂMBIO' },
+      { field: 'convertedValue', headerName: 'TOTAL' },
+      { field: 'method', headerName: 'MÉTODO', width: 150 },
+      { field: 'tag', headerName: 'CATEGORIA', width: 120 },
+      {
+        field: 'actions',
+        headerName: 'EDITAR / EXCLUIR',
+        width: 150,
+        renderCell: (params) => (
+          <>
+            <IconButton
+              data-testid="edit-btn"
+              onClick={ () => { this.editExpense(params.id); } }
+              sx={ sxTable }
+            >
+              <Edit />
+            </IconButton>
+            <IconButton
+              data-testid="delete-btn"
+              onClick={ () => { this.removeExpense(params.id); } }
+              sx={ sxTable }
+            >
+              <Delete />
+            </IconButton>
+          </>
+        ),
+      },
+    ];
+    return colNames;
+  };
 
-      </button>
-      <button
-        data-testid="delete-btn"
-        onClick={ () => this.removeExpense(exp.id) }
-      >
-        Excluir
-
-      </button>
-    </>
-  );
-
-  renderExpenses = () => {
+  getRows = () => {
     const { expenses } = this.props;
-    return expenses.map((exp, index) => (
-      <tr key={ index }>
-        <td>{exp.description}</td>
-        <td>{exp.tag}</td>
-        <td>{exp.method}</td>
-        <td>{this.getValue(exp)}</td>
-        <td>{this.getNameCurrency(exp)}</td>
-        <td>{this.getCambio(exp)}</td>
-        <td>{this.getConvertValue(exp)}</td>
-        <td>Real</td>
-        <td>{this.renderEditButtons(exp)}</td>
-      </tr>
-    ));
+    if (expenses.length < 1) return [];
+    return expenses.map(
+      (exp) => ({
+        id: exp.id,
+        value: this.getValue(exp),
+        description: exp.description,
+        cambio: this.getCambio(exp),
+        currency: this.getNameCurrency(exp),
+        convertedValue: this.getConvertValue(exp),
+        method: exp.method,
+        tag: exp.tag,
+        actions: exp.id,
+      }),
+    );
   };
 
   render() {
+    // const cols = expenses.length > 0 ? Object.keys(expenses[0]) : [];
+    const cols = this.getCols();
+    const rows = this.getRows();
     return (
-      <div>
-        <table>
-          <thead>
-            <tr>
-              {tableHeader.map((desc, index) => (<th key={ index }>{desc}</th>))}
-            </tr>
-          </thead>
-          <tbody>
-            {this.renderExpenses()}
-          </tbody>
-        </table>
+      <div className="Table glass-header">
+        <DataGrid
+          pageSizeOptions={ pages }
+          pagination
+          initialState={ {
+            pagination: { paginationModel: { pageSize: 5 } },
+          } }
+          rows={ rows }
+          columns={ cols }
+          sx={ { color: 'white' } }
+        />
       </div>
     );
   }
