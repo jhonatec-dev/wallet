@@ -1,0 +1,142 @@
+/* Reset */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  scrollbar-color: var(--main-scroll) var(--background);
+}
+
+:root {
+
+  --main-color: rgba(0, 0, 0, 0.5);
+
+  --main-scroll: black;
+
+  --ligth-color: rgba(204, 109, 0, 0.75);
+
+  --main-text-color: white;
+
+  --background: 'red';
+}
+
+/* Scroll Bar */
+::-webkit-scrollbar {
+  background: rgba(0, 0, 0, 0.504);
+  height: 12px;
+  transition: 300ms;
+  width: 12px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgb(59, 59, 59);
+  border-radius: 1ex;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--ligth-color);
+  box-shadow: 0 0 4px black;
+}
+
+::-webkit-scrollbar-corner {
+  background: var(--background);
+}
+
+body {
+
+  /* Create the parallax scrolling effect */
+  background-attachment: fixed;
+  background-image: url('../media/images/background.png');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  color: var(--main-text-color);
+  height: 100%;
+  overflow-y: scroll;
+  padding: 10px;
+}
+
+.glass {
+  backdrop-filter: blur(10px);
+  background-color: var(--main-color);
+
+  /* border: 1px solid rgba(108, 192, 209, 0.5); */
+  border-radius: 10px;
+}
+
+.glass-header {
+  backdrop-filter: blur(35px);
+  background-color: var(--main-color);
+  border-radius: 10px;
+
+  /* border: 1px solid rgba(108, 192, 209, 0.5); */
+
+}
+
+/* Login */
+.Login {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 20% auto;
+  padding: 40px 10px;
+  width: 400px;
+}
+
+.Login__img {
+
+  /* width: 200px; */
+}
+
+/* Wallet */
+.Wallet {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 0 auto;
+  max-width: 1200px;
+  padding: 10px 0;
+}
+
+/* Header */
+.Header {
+  align-items: center;
+  display: flex;
+  font-size: large;
+  height: 100px;
+  justify-content: space-between;
+  padding: 10px;
+}
+
+.Header__total-field {
+  font-weight: 700;
+}
+
+.Header__img {
+  height: 65px;
+}
+
+/* Wallet Form */
+.WalletForm__container {
+  padding: 10px 0;
+}
+
+.WalletForm {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+
+/* Table */
+.Table {
+  padding: 40px 10px;
+}
+
+/* Gráfico */
+.Graphs {
+  min-height: 400px;
+}
+
+.MuiTablePagination-root {
+  filter: invert(1);
+}

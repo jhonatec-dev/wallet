@@ -1,8 +1,12 @@
+import { Button, TextField } from '@mui/material';
 import PropTypes from 'prop-types';
 import React from 'react';
 import { connect } from 'react-redux';
 import validator from 'validator';
+import logo from '../media/images/logo.png';
 import { actionUserLogin } from '../redux/actions';
+
+const sxInput = { filter: 'invert(95%)' };
 
 class Login extends React.Component {
   state = {
@@ -36,30 +40,38 @@ class Login extends React.Component {
     const { btnDisable, email, password } = this.state;
 
     return (
-      <div>
-        <input
+      <div className="Login glass">
+        <img className="Login__img" src={ logo } alt="logo" />
+
+        <TextField
           type="text"
           name="email"
-          placeholder="E-mail"
+          label="E-mail"
+          variant="filled"
           data-testid="email-input"
           value={ email }
           onChange={ this.handleChange }
+          sx={ sxInput }
         />
-        <input
+        <TextField
           type="password"
           name="password"
-          placeholder="Password"
+          label="Password"
+          variant="filled"
           data-testid="password-input"
           value={ password }
           onChange={ this.handleChange }
+          sx={ sxInput }
         />
-        <button
+        <Button
           onClick={ this.goToWallet }
           disabled={ btnDisable }
+          variant="contained"
+          sx={ sxInput }
         >
           Entrar
 
-        </button>
+        </Button>
       </div>
     );
   }
