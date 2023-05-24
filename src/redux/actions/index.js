@@ -6,6 +6,7 @@ export const ACTIONS = {
   removeExpense: 'removeExpense',
   editExpense: 'editExpense',
   updateExpense: 'updateExpense',
+  cancelEditExpense: 'cancelEditExpense',
 };
 
 export const actionUserLogin = (email) => ({
@@ -66,4 +67,8 @@ export const actionRemoveExpense = (expenseId) => ({
 export const actionEditExpense = (expenseId) => ({
   type: ACTIONS.editExpense,
   payload: expenseId,
+});
+
+export const actionCancelEditExpense = () => ({
+  type: ACTIONS.cancelEditExpense,
 });

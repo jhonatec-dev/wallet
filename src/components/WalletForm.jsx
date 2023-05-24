@@ -7,10 +7,13 @@ import {
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { actionWalletEditExpense, fetchCurrencies } from '../redux/actions';
+import {
+  actionCancelEditExpense,
+  actionWalletEditExpense,
+  fetchCurrencies,
+} from '../redux/actions';
 import SelectWithLabel from './SelectWithLabel';
 
-// Variáveis para renderizar
 const arrayMethods = ['Dinheiro', 'Cartão de crédito', 'Cartão de débito'];
 const arrayTags = ['Alimentação', 'Lazer', 'Trabalho', 'Transporte', 'Saúde'];
 
@@ -25,7 +28,7 @@ class WalletForm extends Component {
     tagInput: arrayTags[0],
     btnDisabled: true,
     showEdit: true,
-    idToEdit: 0,
+    idToEdit: -1,
   };
 
   componentDidMount() {
@@ -52,7 +55,6 @@ class WalletForm extends Component {
       });
       return false;
     }
-
     return true;
   }
 
@@ -63,7 +65,6 @@ class WalletForm extends Component {
 
   handleChange = ({ target }) => {
     const { name, value } = target;
-    // console.log('handleChange', target, name, value);
     this.setState({ [name]: value }, this.validateFields);
   };
 
@@ -71,7 +72,6 @@ class WalletForm extends Component {
     const { dispatch, editor, idToEdit } = this.props;
     const { valueInput, descriptionInput,
       currencyInput, methodInput, tagInput } = this.state;
-    // console.warn('pronto pro dispatch', editor, idToEdit);
     const menosUm = -1;
     dispatch(actionWalletEditExpense({
       value: valueInput,
@@ -82,16 +82,26 @@ class WalletForm extends Component {
       id: editor ? idToEdit : menosUm,
     }));
 
-    // limpar os inputs
+    this.resetState();
+  };
+
+  resetState = () => {
+    const { editor } = this.props;
     this.setState({
       valueInput: '',
       descriptionInput: '',
       currencyInput: 'USD',
-      methodInput: 'Dinheiro',
-      tagInput: 'Alimentação',
+      methodInput: arrayMethods[0],
+      tagInput: arrayTags[0],
       btnDisabled: true,
       showEdit: !editor,
     });
+  };
+
+  cancelEdit = () => {
+    const { dispatch } = this.props;
+    dispatch(actionCancelEditExpense());
+    this.resetState();
   };
 
   render() {
@@ -186,6 +196,18 @@ class WalletForm extends Component {
               {btnText}
 
             </Button>
+            {
+              editor
+              && (
+                <Button
+                  onClick={ this.cancelEdit }
+                  variant="contained"
+                  sx={ sxInput }
+                >
+                  Cancelar Edição
+                </Button>
+              )
+            }
           </div>
         </AccordionDetails>
       </Accordion>
@@ -208,13 +230,8 @@ const mapStateToProps = (state) => {
   if (editor) {
     foundExp = expenses.find(({ id }) => id === idToEdit);
   }
-
   return {
-    currencies,
-    editor,
-    expenses,
-    idToEdit,
-    foundExp,
+    currencies, editor, expenses, idToEdit, foundExp,
   };
 };
 
