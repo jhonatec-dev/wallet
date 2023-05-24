@@ -95,6 +95,7 @@ class WalletForm extends Component {
       tagInput: arrayTags[0],
       btnDisabled: true,
       showEdit: !editor,
+      idToEdit: -1,
     });
   };
 
